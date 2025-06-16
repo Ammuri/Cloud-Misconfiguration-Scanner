@@ -1,12 +1,10 @@
-## scanner.py
-
 import os
 import importlib
 import pkgutil
 import click
 from tfscanner import parser
-from cloudscanner.aws import AWSScanner
 from report.json_report import to_json
+from cloudscanner.aws import AWSScanner
 from cloudscanner.common import Finding
 
 # Utility: Discover all available Terraform rule functions
@@ -34,10 +32,13 @@ def tf_scan(path, rules):
     config = parser.load_hcl(path)
     findings = []
 
-    # Determine which rules to run
+    # Determine which rules to run, if not specified, run all
+    if not rules:
+        click.echo("[*] No specific rules provided, running all available rules...")
     available = {func.__name__: func for func in discover_tf_rules()}
     selected = rules.split(',') if rules else list(available.keys())
 
+    # Validate selected rules against available ones
     for name in selected:
         if name not in available:
             click.echo(f"[!] Rule '{name}' not found. Skipping.")
