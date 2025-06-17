@@ -2,6 +2,7 @@ import os
 import importlib
 import pkgutil
 import click
+import tfscanner.rules
 from tfscanner import parser
 #from report.json_report import to_json
 from cloudscanner.aws import AWSScanner
