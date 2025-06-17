@@ -3,9 +3,10 @@ import importlib
 import pkgutil
 import click
 from tfscanner import parser
-from report.json_report import to_json
+#from report.json_report import to_json
 from cloudscanner.aws import AWSScanner
 from cloudscanner.common import Finding
+
 
 # Utility: Discover all available Terraform rule functions
 def discover_tf_rules():
@@ -48,7 +49,7 @@ def tf_scan(path, rules):
         for block in parser.extract_resources(config):  # implement extract_resources in parser
             findings.extend(func(block))
 
-    click.echo(to_json(findings))
+    #click.echo(to_json(findings))
 
 @cli.command('live')
 @click.option('--profile', default='default', help='AWS CLI profile name')
@@ -59,7 +60,7 @@ def live_scan(profile, region):
     findings = []
     findings.extend(scanner.scan_s3())
     findings.extend(scanner.scan_sg())
-    click.echo(to_json(findings))
+    #click.echo(to_json(findings))
 
 if __name__ == '__main__':
     cli()
