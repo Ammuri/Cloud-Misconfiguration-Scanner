@@ -18,16 +18,22 @@ def load_hcl(path):
                         terraform_files.append((full_path, hcl2.load(f)))
                     except hcl2.HCLParseError as e:
                         print(f"[!] Error parsing {full_path}: {e}")
-                        
-    # Merge all loaded HCL files into a single dictionary
-    # config = {}
-    # for file in terraform_files:
-    #     for block_type, block_list in file.items():
-    #         #each block_list is a list of dicts
-    #         config.setdefault(block_type, []).extend(block_list)
     
-    print("The terraform_files contains the following: ", terraform_files)
     return terraform_files
 
 
-def extract_resources(config):
+def extract_resources(terraform_files):
+    for file_path, terraform_file in terraform_files:
+        print(f"[*] Extracting resources from {file_path}")
+        for block in terraform_file.get("resource", []):
+            for r_type, instances in block.items():
+                for name, attrs in instances.items():
+                    # Each instance is a dict of attributes
+                    # print(f"[*] Found resource: [r_type: {r_type} | name: {name} | attrs: {attrs}]\n")
+                    yield {
+                        "file": file_path,
+                        "type": r_type,
+                        "name": name,
+                        "attrs": attrs
+                    }
+    

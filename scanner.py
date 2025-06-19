@@ -1,6 +1,7 @@
 import os
 import importlib
 import pkgutil
+import re
 import click
 import tfscanner.rules
 from tfscanner import parser
@@ -31,7 +32,7 @@ def cli():
 def tf_scan(path, rules):
     """Static scan of Terraform code at PATH"""
     # Load and parse HCL
-    config = parser.load_hcl(path)
+    terraform_files = parser.load_hcl(path)
     findings = []
 
     # Determine which rules to run, if not specified, run all
@@ -47,9 +48,9 @@ def tf_scan(path, rules):
             continue
         func = available[name]
         # Traverse parsed config for each resource attrs dict
-        for block in parser.extract_resources(config):  # implement extract_resources in parser
-            findings.extend(func(block))
-
+        for resource in parser.extract_resources(terraform_files):  # implement extract_resources in parser
+            findings.extend(func(resource))
+        
     #click.echo(to_json(findings))
 
 @cli.command('live')
