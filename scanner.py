@@ -1,11 +1,9 @@
-import os
 import importlib
 import pkgutil
-import re
 import click
+from report.json_report import to_json
 import tfscanner.rules
 from tfscanner import parser
-#from report.json_report import to_json
 from cloudscanner.aws import AWSScanner
 from cloudscanner.common import Finding
 
@@ -51,7 +49,7 @@ def tf_scan(path, rules):
         for resource in parser.extract_resources(terraform_files):  # implement extract_resources in parser
             findings.extend(func(resource))
         
-    #click.echo(to_json(findings))
+    click.echo(to_json(findings))
 
 @cli.command('live')
 @click.option('--profile', default='default', help='AWS CLI profile name')

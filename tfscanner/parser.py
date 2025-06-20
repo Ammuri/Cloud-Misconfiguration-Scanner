@@ -3,14 +3,12 @@ import os
 
 
 def load_hcl(path):
-    print("[*] Loading HCL files from path:", path)
     # Walk the path and load all HCL files
     terraform_files = []
     for root, _, files in os.walk(path):
         for fname in files:
             if fname.endswith('.tf'):
                 full_path = os.path.join(root, fname)
-                print(f"[*] Found Terraform file: {full_path}")
                 # Parse the HCL file
                 # Use hcl2 to load the file, catching any parsing errors
                 with open(full_path, 'r') as f:
@@ -24,7 +22,6 @@ def load_hcl(path):
 
 def extract_resources(terraform_files):
     for file_path, terraform_file in terraform_files:
-        print(f"[*] Extracting resources from {file_path}")
         for block in terraform_file.get("resource", []):
             for r_type, instances in block.items():
                 for name, attrs in instances.items():
