@@ -10,7 +10,7 @@ Python-based CLI tool that inspects both live cloud (AWS then Azure) and Terrafo
 ## Prerequisites
 - Python 3.8 or higher
 - pip (Python package installer)
-- (Not-needed) AWS CLI configured with appropriate permissions
+- AWS CLI configured with appropriate permissions
 - (Not-needed) Azure CLI configured with appropriate permissions (if Azure scanning is enabled)
 ## Installation
 Clone the repository:
