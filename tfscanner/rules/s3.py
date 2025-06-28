@@ -11,7 +11,6 @@ def check_s3_bucket_legacy_acl(resource):
     
     acl = attrs.get("acl")
     if acl in ("public-read", "public-read-write"):
-        print(f"Found legacy ACL '{acl}' for S3 bucket '{name}' in file '{file}'")
         findings.append(
             Finding(
                 resource_type = resource["type"],

@@ -13,7 +13,6 @@ def check_sg_open_ingress(resource):
                 "0.0.0.0/0" in rule["cidr_blocks"] 
                 or "::/0" in rule["cidr_blocks"]
             ):
-                print(f"Found open ingress rule for security group '{name}' in file '{file}'")
                 findings.append(
                     Finding(
                         resource_type=resource["type"],
@@ -29,7 +28,6 @@ def check_sg_open_ingress(resource):
                 )
             
             if "protocol" in rule and rule["protocol"] == "-1":
-                print(f"Found 'any' protocol rule for security group '{name}' in file ' {file}'")
                 findings.append(
                     Finding(
                         resource_type=resource["type"],
@@ -46,7 +44,6 @@ def check_sg_open_ingress(resource):
     if resource["type"] == "aws_vpc_security_group_ingres_rule":
         # Handle the case where the ingress rule is defined in a separate resource
         if attrs.get("ip_protocol") == "-1":
-            print(f"Found 'any' protocol rule for security group '{name}' in file '{file}'")
             findings.append(
                 Finding(
                     resource_type=resource["type"],
@@ -75,7 +72,6 @@ def check_sg_open_egress(resource):
                 "0.0.0.0/0" in rule["cidr_blocks"] 
                 or "::/0" in rule["cidr_blocks"]
             ):
-                print(f"Found open egress rule for security group '{name}' in file '{file}'")
                 findings.append(
                     Finding(
                         resource_type=resource["type"],
@@ -90,7 +86,6 @@ def check_sg_open_egress(resource):
                     )
                 )
             elif "protocol" in rule and rule["protocol"] == "-1":
-                print(f"Found 'any' protocol rule for security group '{name}' in file '{file}'")
                 findings.append(
                     Finding(
                         resource_type=resource["type"],
@@ -107,7 +102,6 @@ def check_sg_open_egress(resource):
     elif resource["type"] == "aws_vpc_security_group_egress_rule":
         # Handle the case where the egress rule is defined in a separate resource
         if attrs.get("cidr_ipv4") == "0.0.0.0/0" or attrs.get("cidr_ipv4") == "::/0":
-            print(f"Found open egress rule for security group '{name}' in file '{file}'")
             findings.append(
                 Finding(
                     resource_type=resource["type"],
@@ -122,7 +116,6 @@ def check_sg_open_egress(resource):
                 )
             )
         if attrs.get("ip_protocol") == "-1":
-            print(f"Found 'any' protocol rule for security group '{name}' in file '{file}'")
             findings.append(
                 Finding(
                     resource_type=resource["type"],

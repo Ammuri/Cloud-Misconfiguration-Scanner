@@ -1,3 +1,4 @@
+from gettext import find
 import importlib
 import pkgutil
 import click
@@ -48,7 +49,11 @@ def tf_scan(path, rules):
         # Traverse parsed config for each resource attrs dict
         for resource in parser.extract_resources(terraform_files):  # implement extract_resources in parser
             findings.extend(func(resource))
-        
+    
+    if not findings:
+        click.echo("[*] No findings identified.")
+        return
+    click.echo(f"[*] Identified {len(findings)} findings in Terraform code.")
     click.echo(to_json(findings))
 
 @cli.command('live')
@@ -58,9 +63,15 @@ def live_scan(profile, region):
     """Live scan of AWS account"""
     scanner = AWSScanner(profile_name=profile, region_name=region)
     findings = []
-    findings.extend(scanner.scan_s3())
-    findings.extend(scanner.scan_sg())
-    #click.echo(to_json(findings))
+    findings.extend(scanner.scan_root_mfa())
+    #findings.extend(scanner.scan_s3())
+    #findings.extend(scanner.scan_sg())
+    
+    if not findings:
+        click.echo("[*] No findings identified.")
+        return
+    click.echo(f"[*] Identified {len(findings)} findings in live AWS account.")
+    click.echo(to_json(findings))
 
 if __name__ == '__main__':
     cli()
