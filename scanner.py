@@ -46,9 +46,11 @@ def tf_scan(path, rules):
             click.echo(f"[!] Rule '{name}' not found. Skipping.")
             continue
         func = available[name]
-        # Traverse parsed config for each resource attrs dict
+        # Traverse parsed config for each resource and data attrs dict
         for resource in parser.extract_resources(terraform_files):  # implement extract_resources in parser
             findings.extend(func(resource))
+        for data in parser.extract_data(terraform_files):  # implement extract_data in parser
+            findings.extend(func(data))
     
     if not findings:
         click.echo("[*] No findings identified.")
@@ -75,4 +77,3 @@ def live_scan(profile, region):
 
 if __name__ == '__main__':
     cli()
- 

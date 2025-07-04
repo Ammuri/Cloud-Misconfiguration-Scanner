@@ -26,7 +26,6 @@ def extract_resources(terraform_files):
             for r_type, instances in block.items():
                 for name, attrs in instances.items():
                     # Each instance is a dict of attributes
-                    # print(f"[*] Found resource: [r_type: {r_type} | name: {name} | attrs: {attrs}]\n")
                     yield {
                         "file": file_path,
                         "type": r_type,
@@ -34,3 +33,16 @@ def extract_resources(terraform_files):
                         "attrs": attrs
                     }
     
+    
+def extract_data(terraform_files):
+    for file_path, terraform_file in terraform_files:
+        for block in terraform_file.get("data", []):
+            for d_type, instances in block.items():
+                for name, attrs in instances.items():
+                    # Each instance is a dict of attributes
+                    yield {
+                        "file": file_path,
+                        "type": d_type,
+                        "name": name,
+                        "attrs": attrs
+                    }
